@@ -1,0 +1,56 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+interface Channel {
+    primary:string,
+    referenece: string
+}
+
+interface ChannelsObject {
+    id: number
+    channelName: string,
+    channel: Channel,
+    backupChannel: Channel[]
+}
+
+const initialState: ChannelsObject[] = [
+    {
+        id: 1,
+        channelName: 'test',
+        channel: {
+            primary: 'A',
+            referenece: 'B'
+        },
+        backupChannel: []
+    }
+]
+
+export const channelSlice = createSlice({
+  name: 'channel',
+  initialState,
+  reducers: {
+    add: (state, action) => {
+      state.push(action.payload)
+    },
+
+    remove: (state, action) => {
+        const index = state.findIndex(obj => obj.id === action.payload);
+        if (index !== -1) {
+          state.splice(index, 1);
+        }
+    },
+
+    update: (state, action) => {
+        const { id, keyName, keyValue } = action.payload;
+        const obj = state.find(obj => obj.id === id);
+        if (obj) {
+          obj[keyName] = keyValue;
+        }
+      },
+    },
+  },
+);
+
+// Action creators are generated for each case reducer function
+export const { add, remove, update } = channelSlice.actions
+
+export default channelSlice.reducer
